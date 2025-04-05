@@ -1,0 +1,13 @@
+{
+  "name": "ATMGroup Investor Portal Dev Environment",
+  // You might want to adjust the base image if you know the specific one your Codespace uses,
+  // but this universal image is a common default.
+  "image": "mcr.microsoft.com/devcontainers/universal:linux",
+
+  // Grant passwordless sudo to the codespace user
+  "postCreateCommand": "echo 'codespace ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/90-codespace"
+
+  // You can add other configurations below if needed (e.g., features, ports)
+  // "features": {},
+  // "forwardPorts": [],
+}

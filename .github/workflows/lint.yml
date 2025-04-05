@@ -1,0 +1,34 @@
+name: Lint Code
+
+on:
+  push:
+    branches: [ main ] # Or your primary branch name
+  pull_request:
+    branches: [ main ] # Or your primary branch name
+
+jobs:
+  lint:
+    name: Run Linters
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # Use a recent LTS version
+        cache: 'npm' # Enable caching for npm dependencies across both frontend and backend
+
+    - name: Install Frontend Dependencies
+      run: cd frontend && npm ci
+
+    - name: Run Frontend Linter
+      run: cd frontend && npm run lint
+
+    - name: Install Backend Dependencies
+      run: cd backend && npm ci
+
+    - name: Run Backend Linter
+      run: cd backend && npm run lint
