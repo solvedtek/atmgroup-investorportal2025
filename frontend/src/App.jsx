@@ -2,10 +2,10 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 
 // Import the new components
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
-import Navbar from './components/layout/Navbar';
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+import Navbar from "./components/layout/Navbar";
 
 function App() {
   return (
