@@ -1,0 +1,63 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x] # Example Node versions, adjust as needed
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+    - name: Install Backend Dependencies
+      working-directory: ./backend
+      run: npm ci
+    - name: Run Backend Linters
+      working-directory: ./backend
+      run: npm run lint
+    # Add backend tests here when available:
+    # - name: Run Backend Tests
+    #   working-directory: ./backend
+    #   run: npm test
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x] # Example Node versions, adjust as needed
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    - name: Install Frontend Dependencies
+      working-directory: ./frontend
+      run: npm ci
+    - name: Run Frontend Linters
+      working-directory: ./frontend
+      run: npm run lint
+    # Add frontend tests here when available:
+    # - name: Run Frontend Tests
+    #   working-directory: ./frontend
+    #   run: npm test
+    - name: Build Frontend
+      working-directory: ./frontend
+      run: npm run build

@@ -1,6 +1,8 @@
 require('dotenv').config();
 const connectDB = require('./config/db');
 const express = require('express');
+const requestLogger = require('./middleware/requestLogger');
+const errorHandler = require('./middleware/errorHandler');
 
 // Connect to Database
 connectDB();
@@ -10,6 +12,8 @@ const port = process.env.PORT || 3000; // Use port from .env or default to 3000
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+// Request Logging Middleware
+app.use(requestLogger);
 
 // Define Routes (Placeholders for now)
 app.use('/api/v1/auth', require('./routes/auth'));
@@ -18,6 +22,9 @@ app.use('/api/v1/properties', require('./routes/properties'));
 app.get('/', (req, res) => {
   res.send('Hello World from Backend!');
 });
+
+// Global Error Handling Middleware (Must be last)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`));
