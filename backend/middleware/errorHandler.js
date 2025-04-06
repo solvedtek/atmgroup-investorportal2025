@@ -1,5 +1,5 @@
 // backend/middleware/errorHandler.js
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, _next) => {
   console.error('Error:', err.message);
   // Log the full stack trace for debugging purposes
   if (err.stack) {
@@ -11,9 +11,10 @@ const errorHandler = (err, req, res, next) => {
 
   // Prepare the response body
   const responseBody = {
-    message: statusCode === 500 && process.env.NODE_ENV === 'production'
-      ? 'Internal Server Error' // Generic message for 500 errors in production
-      : err.message || 'An unexpected error occurred', // Use error message or a default
+    message:
+      statusCode === 500 && process.env.NODE_ENV === 'production'
+        ? 'Internal Server Error' // Generic message for 500 errors in production
+        : err.message || 'An unexpected error occurred', // Use error message or a default
   };
 
   // Optionally include stack trace in development environment

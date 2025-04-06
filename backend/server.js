@@ -1,6 +1,6 @@
 require('dotenv').config();
-const connectDB = require('./config/db');
 const express = require('express');
+const connectDB = require('./config/db');
 const requestLogger = require('./middleware/requestLogger');
 const errorHandler = require('./middleware/errorHandler');
 
@@ -8,7 +8,7 @@ const errorHandler = require('./middleware/errorHandler');
 connectDB();
 
 const app = express();
-const port = process.env.PORT || 3000; // Use port from .env or default to 3000
+// const port = process.env.PORT || 3000; // This was unused, PORT (uppercase) is used below
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -27,10 +27,14 @@ app.get('/', (req, res) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`));
+const server = app.listen(PORT, () =>
+  console.log(
+    `Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`
+  )
+);
 
 // Handle unhandled promise rejections (optional but good practice)
-process.on('unhandledRejection', (err, promise) => {
+process.on('unhandledRejection', (err, _promise) => {
   console.error(`Error: ${err.message}`);
   // Close server & exit process
   server.close(() => process.exit(1));
