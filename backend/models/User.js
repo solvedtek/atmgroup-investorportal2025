@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const bcrypt = require('bcrypt'); // We'll need this later for password hashing
+const bcrypt = require('bcrypt'); // Password hashing
 
 const UserSchema = new mongoose.Schema(
   {
@@ -43,6 +43,20 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-// TODO: Add pre-save middleware hook here later to hash password using bcrypt
+/**
+ * Hash password before saving
+ */
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = mongoose.model('User', UserSchema);

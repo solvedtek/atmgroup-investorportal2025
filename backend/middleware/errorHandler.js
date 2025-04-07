@@ -1,23 +1,35 @@
 // backend/middleware/errorHandler.js
 const errorHandler = (err, req, res, _next) => {
   console.error('Error:', err.message);
-  // Log the full stack trace for debugging purposes
   if (err.stack) {
     console.error('Stack:', err.stack);
   }
 
-  // Determine the status code: use the error's status code if available, otherwise default to 500
-  const statusCode = err.statusCode || 500;
+  let statusCode = err.statusCode || 500;
+  let message = err.message || 'An unexpected error occurred';
+  let details = undefined;
 
-  // Prepare the response body
+  // Handle express-validator validation errors
+  if (Array.isArray(err.errors)) {
+    statusCode = 400;
+    message = 'Validation failed';
+    details = err.errors.map((e) => ({
+      field: e.param,
+      message: e.msg,
+    }));
+  }
+
   const responseBody = {
     message:
       statusCode === 500 && process.env.NODE_ENV === 'production'
-        ? 'Internal Server Error' // Generic message for 500 errors in production
-        : err.message || 'An unexpected error occurred', // Use error message or a default
+        ? 'Internal Server Error'
+        : message,
   };
 
-  // Optionally include stack trace in development environment
+  if (details) {
+    responseBody.details = details;
+  }
+
   if (process.env.NODE_ENV !== 'production') {
     responseBody.stack = err.stack;
   }

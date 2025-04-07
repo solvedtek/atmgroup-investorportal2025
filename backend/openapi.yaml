@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: ATMG Investor Portal API
+  version: 1.0.0
+  description: API documentation for the ATMG Investor Portal backend.
+
+servers:
+  - url: http://localhost:3000/api/v1
+
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Registration successful
+        '400':
+          description: Validation error
+
+  /auth/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Validation error
+
+  /properties:
+    post:
+      summary: Create a new property
+      responses:
+        '201':
+          description: Property created
+        '400':
+          description: Validation error
+
+    get:
+      summary: List properties
+      responses:
+        '200':
+          description: List of properties
+
+  /properties/{id}:
+    put:
+      summary: Update a property
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Property updated
+        '400':
+          description: Validation error
